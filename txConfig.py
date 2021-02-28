@@ -10,11 +10,21 @@ __version__     = "0.0.2"
 
 import time
 from argparse import ArgumentParser
-import json
+try:
+    import commentjson as json
+    _commentjson_error = False
+except:
+    import json
+    _commentjson_error = True
 
 import log
 import logging
 l = logging.getLogger("piTelex." + __name__)
+
+if _commentjson_error:
+    # Presently, this will only log to console and not to the error log since
+    # the latter is set up after configuration has been read successfully.
+    l.warning("commentjson could not be imported; loading configuration from telex.json may fail if there are comments inside.")
 
 #######
 # definitions and configuration
@@ -142,8 +152,8 @@ def load():
         dest="wru_fallback", default=False, action="store_true",
         help="Enable software ID fallback mode: If printer isn't starting up on command, enable software ID")
 
-    parser.add_argument("--errlog-path",
-        dest="errlog_path", default=False, action="store_true",
+    parser.add_argument("--errorlog-path",
+        dest="errorlog_path", default=False, action="store_true",
         help="Path of error log; relative paths are referred to where this program is being executed")
 
     #parser.add_argument("-m", "--mode",
@@ -181,19 +191,19 @@ def load():
 
     if ARGS.screen and 'screen' not in devices:
         devices['screen'] = {
-            'type': 'screen', 
-            'enable': True, 
-            'show_BuZi': True, 
-            'show_capital': False, 
-            'show_ctrl': True, 
+            'type': 'screen',
+            'enable': True,
+            'show_BuZi': True,
+            'show_capital': False,
+            'show_ctrl': True,
             'show_info': False
             }
 
     if ARGS.terminal:
         devices['terminal'] = {
-            'type': 'terminal', 
-            'enable': True, 
-            'portname': ARGS.terminal.strip(), 
+            'type': 'terminal',
+            'enable': True,
+            'portname': ARGS.terminal.strip(),
             'baudrate': 300,
             'bytesize': 8,
             'stopbits': 1,
@@ -247,6 +257,7 @@ def load():
             'pin_LED_A': 0,
             'pin_LED_WB': 0,
             'pin_LED_WB_A': 9,
+            'pin_LED_LT': 0,
             'pin_LED_status_R': 23,
             'pin_LED_status_G': 24,
             }
@@ -263,10 +274,11 @@ def load():
             'baudrate': 50,
             'devindex': None,
             'zcarrier': False,
+            'unres_threshold': 100,
             }
 
     if ARGS.itelex >= 0:
-        devices['i-Telex'] = {'type': 'i-Telex', 'enable': True, 'port': ARGS.itelex, 'number': 0, 'tns-pin': 12345}
+        devices['i-Telex'] = {'type': 'i-Telex', 'enable': True, 'port': ARGS.itelex, 'tns-dynip-number': 0, 'tns-pin': 12345}
 
     if ARGS.news:
         devices['news'] = {'type': 'news', 'enable': True, 'newspath': ARGS.news.strip()}
@@ -307,9 +319,9 @@ def load():
     if wru_fallback:
         CFG['wru_fallback'] = ARGS.wru_fallback
 
-    errlog_path = ARGS.errlog_path
-    if errlog_path:
-        CFG['errlog_path'] = ARGS.errlog_path
+    errorlog_path = ARGS.errorlog_path
+    if errorlog_path:
+        CFG['errorlog_path'] = ARGS.errorlog_path
 
     #mode = ARGS.mode.strip()
     #if mode:
