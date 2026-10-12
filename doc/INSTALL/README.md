@@ -20,8 +20,6 @@
 
 #### Computer platforms
 * RaspBerry Pi (all flavours with 40 pin GPIO, for TW39 a Pi Zero is sufficient)
-* Other SBC (GPIO functionality not completely tested, but USB should work)
-* PC hardware with free USB Port(s)
 
 #### Additional hardware
 * Hardware matching the selected connection to the computer (Raspi GPIO, USB) and matching the connection type of the teletype (TW39 with or w/o CCU, V10, ED1000)
@@ -29,11 +27,9 @@
 
 ### Software requirements
 * Debian based linux distro (RaspBerry Pi OS, debian, ubuntu, mint,...)
-* or Windows (all flavours)
 * Python3
-* A few additional python3 modules (see Documentation)
+
 
 ### Documentation
 * Complete Docuemtation for installation and usage can be found at https://github.com/fablab-wue/piTelex/wiki
-* The file(s) "piTelex-Install-für-NichtSysAdmins.\*", contributed by Wolfram Henkel,  provide installation instructions (in german) using the example of a TW39 system with Ö-AGT and Raspberry Pi under linux, specifically geared towards experienced windows users but without specific linux knowledge.
 
